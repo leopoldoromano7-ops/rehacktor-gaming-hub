@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@400;700&display=swap');
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+@theme {
+  --font-sans: 'Roboto', sans-serif;
+  --font-display: 'Roboto Condensed', sans-serif;
+}
+
+@layer base {
+  :root {
+    --app-bg: #050510;
+    --app-panel: #1e1b4b;
+    --app-panel-deep: #120f31;
+    --app-primary: #8b5cf6;
+    --app-secondary: #ec4899;
+    --app-accent: #c084fc;
+    --app-text: #f5f3ff;
+    --app-text-soft: rgb(245 243 255 / 0.72);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: var(--app-bg);
+    color: var(--app-text);
+    font-family: var(--font-sans);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .app-backdrop {
+    background:
+      radial-gradient(circle at top center, rgb(192 132 252 / 0.18), transparent 24%),
+      radial-gradient(circle at 14% 14%, rgb(139 92 246 / 0.24), transparent 26%),
+      radial-gradient(circle at 82% 18%, rgb(236 72 153 / 0.14), transparent 24%),
+      linear-gradient(180deg, #120f2c 0%, #080713 46%, #050510 100%);
+  }
+
+  .app-grid {
+    background-image:
+      linear-gradient(rgb(192 132 252 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(192 132 252 / 0.04) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    mask-image: linear-gradient(180deg, rgb(0 0 0 / 0.85), transparent 96%);
+  }
+
+  .surface-panel {
+    background: linear-gradient(180deg, rgb(30 27 75 / 0.94), rgb(11 9 30 / 0.96));
+  }
+
+  .surface-panel-soft {
+    background: linear-gradient(180deg, rgb(40 34 96 / 0.9), rgb(14 11 39 / 0.94));
+  }
+
+  .brand-primary {
+    background: linear-gradient(90deg, #8b5cf6 0%, #c084fc 100%);
+  }
+
+  .brand-secondary {
+    background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%);
+  }
+
+  .brand-highlight {
+    box-shadow:
+      0 0 0 1px rgb(192 132 252 / 0.18),
+      0 0 36px rgb(139 92 246 / 0.16);
+  }
+}
