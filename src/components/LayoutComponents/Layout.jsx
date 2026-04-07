@@ -19,7 +19,7 @@ export default function Layout() {
     isAuthFormPage ||
     pathname === routes.profile ||
     pathname === routes.profile_settings
-  const navbarGap = 10
+  const navbarGap = 30
   const layoutTopOffset = navbarHeight + navbarGap
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function Layout() {
       </div>
 
       <div
-        className="relative mx-auto flex min-h-screen w-full max-w-[1500px] flex-col px-0 pb-6 sm:px-4 lg:px-6"
+        className="relative mx-auto flex min-h-screen w-full max-w-[1500px] flex-col px-3 pb-6 sm:px-4 lg:px-6"
         style={{ paddingTop: `${layoutTopOffset}px` }}
       >
         <Navbar ref={navbarRef} />

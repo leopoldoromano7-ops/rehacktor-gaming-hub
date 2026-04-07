@@ -183,3 +183,15 @@ export async function getGameDetailPayload(gameId, signal) {
     sourceMessage: `Scheda live RAWG per ${game.name}.`,
   }
 }
+
+export async function getGamePreviewPayload(gameId, signal) {
+  const game = await fetchRawg(`games/${gameId}`, {}, signal)
+
+  return {
+    id: game.id,
+    name: game.name,
+    background_image: game.background_image,
+    released: game.released,
+    rating: game.rating,
+  }
+}

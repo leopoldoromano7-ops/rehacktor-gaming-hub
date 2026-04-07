@@ -70,7 +70,7 @@ export default function PageHero({
   const panelDescription = sideDescription || featuredSummary
   const heroColumns = compact
     ? 'lg:[grid-template-columns:minmax(0,1.52fr)_280px]'
-    : 'lg:[grid-template-columns:minmax(0,1.52fr)_350px]'
+    : 'lg:[grid-template-columns:minmax(0,1.48fr)_280px]'
   const mediaMinHeight = compact ? 'min-h-[190px] sm:min-h-[220px]' : 'min-h-[280px]'
   const mediaContentPadding = compact ? 'p-4 sm:p-5' : 'p-5 sm:p-6'
   const panelShell = compact ? 'gap-4 p-4' : 'gap-5 p-5'
@@ -193,7 +193,7 @@ export default function PageHero({
             <div className="space-y-2 text-sm text-[#f5f3ff]">
               {detailRows.map((item) => (
                 <div
-                  className="flex items-center justify-between gap-3 border-b border-[#c084fc]/10 pb-2 last:border-b-0 last:pb-0"
+                  className="flex flex-col items-start gap-1 border-b border-[#c084fc]/10 pb-2 last:border-b-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
                   key={item.label}
                 >
                   <span className="text-[11px] uppercase tracking-[0.24em] text-[#b4a9df]">
@@ -205,19 +205,19 @@ export default function PageHero({
             </div>
           ) : featuredGame ? (
             <div className="space-y-2 text-sm text-[#f5f3ff]">
-              <div className="flex items-center justify-between gap-3 border-b border-[#c084fc]/10 pb-2">
+              <div className="flex flex-col items-start gap-1 border-b border-[#c084fc]/10 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <span className="text-[11px] uppercase tracking-[0.24em] text-[#b4a9df]">
                   Release
                 </span>
                 <span>{formatReleaseDate(featuredGame.released)}</span>
               </div>
-              <div className="flex items-center justify-between gap-3 border-b border-[#c084fc]/10 pb-2">
+              <div className="flex flex-col items-start gap-1 border-b border-[#c084fc]/10 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <span className="text-[11px] uppercase tracking-[0.24em] text-[#b4a9df]">
                   User rating
                 </span>
                 <span>{formatScore(featuredGame.rating)}</span>
               </div>
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <span className="text-[11px] uppercase tracking-[0.24em] text-[#b4a9df]">
                   Platforms
                 </span>

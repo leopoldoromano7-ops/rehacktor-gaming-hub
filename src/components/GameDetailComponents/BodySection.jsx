@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FaHeart, FaRegHeart } from 'react-icons/fa6'
 import { FiMessageSquare } from 'react-icons/fi'
 import supabase from '../../database/supabase.js'
+import { routes } from '../../router/routes.js'
 
 const FAVOURITES_TABLE = 'favourites'
 const REVIEWS_TABLE = 'reviews'
@@ -241,7 +243,7 @@ export default function BodySection({ game, profile_id }) {
 
         <div className="flex h-full flex-col gap-4 p-5">
           <p className="text-sm leading-6 text-[#ddd6fe]">
-            Aggiungi o rimuovi questo gioco dai tuoi preferiti. Lo stato viene letto dal database al primo render della pagina.
+            Aggiungi o rimuovi questo gioco dai tuoi preferiti.
           </p>
 
           <button
@@ -273,11 +275,18 @@ export default function BodySection({ game, profile_id }) {
           </button>
 
           <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-4 py-3 text-sm text-[#f5f3ff]">
-            Stato attuale:{' '}
+            {' '}
             <span className={isFavourite ? 'text-[#f4b7da]' : 'text-[#c084fc]'}>
               {isFavourite ? 'gioco presente nei preferiti' : 'gioco non presente nei preferiti'}
             </span>
           </div>
+
+          <Link
+            className="inline-flex items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#0d0a22] px-4 py-3 text-sm font-medium text-[#ddd6fe] transition-colors hover:border-[#c084fc]/28 hover:bg-[#120f31] hover:text-white"
+            to={routes.profile}
+          >
+            I tuoi preferiti
+          </Link>
 
           {favouriteError ? (
             <p className="text-sm leading-6 text-[#f4b7da]">{favouriteError}</p>

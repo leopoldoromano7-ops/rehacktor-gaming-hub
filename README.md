@@ -23,9 +23,3 @@ npm run dev
 1. copia `.env.example` in `.env`
 2. inserisci la tua chiave in `VITE_RAWG_API_KEY`
 
-Se la chiave manca, l'app parte comunque con un catalogo demo locale.
-
-## Note
-
-- i dati live usano gli endpoint RAWG documentati su https://rawg.io/apidocs
-- il footer contiene il backlink verso RAWG richiesto dai loro termini

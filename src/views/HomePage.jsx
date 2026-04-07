@@ -23,39 +23,40 @@ export default function HomePage() {
   const isSortedView = sortMode === 'trending' || sortMode === 'top-rated'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ">
       {isSortedView ? (
         <PageHero
           compact
           contextDetails={[
-            { label: 'Vista attiva', value: modeLabel },
+            { label: 'Elenco', value: modeLabel },
             { label: 'Titoli totali', value: totalLabel },
             { label: 'Piattaforme', value: topPlatforms || 'Multi-platform' },
           ]}
-          desktopMinHeightClass="lg:min-h-[calc(100vh-156px)]"
-          description="La home si adatta al filtro selezionato e porta subito in evidenza il primo titolo del feed ordinato."
+          contextTags={[modeLabel, source === 'rawg' ? 'Feed live' : 'Offline']}
           eyebrow={modeLabel}
           featuredGame={featuredGame}
-          showSourceMessage={false}
-          showTags={false}
-          showTopRibbon={false}
           sideDescription={
             sortMode === 'trending'
-              ? 'Stai guardando i giochi che emergono di piu nel catalogo RAWG in base a popolarita e interesse recente.'
-              : 'Stai guardando i giochi ordinati per rating, con una vetrina che mette subito in evidenza il primo titolo del feed.'
+              ? 'Stai guardando i giochi che emergono di piu nel catalogo in base alla loro popolarita.'
+              : 'Stai guardando i giochi piu votati ed apprezzati del catalogo .'
           }
           sideTitle={modeLabel}
           source={source}
-          sourceMessage={sourceMessage}
+          sourceMessage={
+            source === 'rawg'
+              ? modeLabel
+              : sourceMessage
+          }
           title={modeLabel}
         />
       ) : (
         <PageHero
           brandLogo={logo}
-          description="Una piattaforma gaming costruita per esplorare cataloghi, schede dettaglio, profili utente, preferiti e recensioni in un unica esperienza neon."
+          description="Una piattaforma di consulting basata sul mondo del gaming! costruita per esplorare i videogiochi a 360 gradi!."
           desktopMinHeightClass="lg:min-h-[calc(100vh-156px)]"
           eyebrow="Homepage"
           showActions={false}
+          sideDescription="Analizza trend, generi e schede di gioco in un catalogo pensato per orientarti tra dati live, insight rapidi e consultazione visuale."
           source={source}
           sourceMessage={sourceMessage}
           stack={['React', 'React Router', 'Tailwind', 'DaisyUI', 'Supabase', 'RAWG API']}
@@ -65,7 +66,7 @@ export default function HomePage() {
       )}
 
       <GameGrid
-        emptyBody="RAWG non ha restituito titoli per questa selezione. Riprova tra poco o cambia filtro."
+        emptyBody="Purtoppo non siamo stati in grado di restituiti titoli per questa selezione. Riprova tra poco o cambia filtro."
         emptyTitle="Nessun gioco in vetrina"
         games={games}
       />

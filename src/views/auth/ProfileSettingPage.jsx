@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiImage, FiUploadCloud, FiUser } from 'react-icons/fi'
 import { FaUserAstronaut } from 'react-icons/fa'
-import Miranda from '../../assets/miranda.jpg'
 import { UserContext } from '../../context/UserContext.jsx'
 import { routes } from '../../router/routes.js'
 import supabase from '../../database/supabase.js'
@@ -88,7 +87,8 @@ export default function ProfileSettingsPage() {
 
     const navigate = useNavigate()
     const displayName = profile?.username || user?.user_metadata?.username || user?.email || 'Player'
-    const previewSrc = preview || currentAvatar || Miranda
+    const previewSrc = preview || currentAvatar
+    const hasAvatarPreview = Boolean(previewSrc)
 
     const onSubmit = async (data) => {
         await updateProfile(data)
@@ -105,11 +105,15 @@ return (
             <div className="grid gap-px bg-[#c084fc]/10 xl:[grid-template-columns:360px_minmax(0,1fr)]">
                 <aside className="surface-panel-soft flex flex-col items-center gap-5 p-6">
                     <div className="brand-highlight flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/25 bg-[#1f173f]">
-                        <img
-                            alt="Avatar preview"
-                            className="h-full w-full object-cover"
-                            src={previewSrc}
-                        />
+                        {hasAvatarPreview ? (
+                            <img
+                                alt="Avatar preview"
+                                className="h-full w-full object-cover"
+                                src={previewSrc}
+                            />
+                        ) : (
+                            <FaUserAstronaut className="text-6xl text-[#f4b7da]" />
+                        )}
                     </div>
 
                     <div className="space-y-2 text-center">
@@ -130,7 +134,7 @@ return (
                         </div>
                         <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-4 py-3">
                             <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">Preview source</p>
-                            <p className="mt-1 text-sm text-white">{file ? 'Local file selected' : 'Current avatar'}</p>
+                            <p className="mt-1 text-sm text-white">{file ? 'Local file selected' : currentAvatar ? 'Current avatar' : 'No avatar'}</p>
                         </div>
                     </div>
                 </aside>
@@ -203,7 +207,13 @@ return (
                         </label>
 
                         <div className="mt-5 flex items-center gap-4">
-                            <img src={previewSrc} alt="Avatar preview" className="h-24 w-24 rounded-full border border-[#ec4899]/20 object-cover" />
+                            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/20 bg-[#1f173f]">
+                                {hasAvatarPreview ? (
+                                    <img src={previewSrc} alt="Avatar preview" className="h-full w-full object-cover" />
+                                ) : (
+                                    <FaUserAstronaut className="text-4xl text-[#f4b7da]" />
+                                )}
+                            </div>
                             <div className="text-sm text-[#b4a9df]">
                                 <p>L anteprima mostra subito il file scelto.</p>
                                 <p>Dopo il salvataggio torni al profilo aggiornato.</p>

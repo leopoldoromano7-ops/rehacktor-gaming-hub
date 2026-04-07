@@ -15,7 +15,7 @@ export default function Sidebar({ genres, source, sourceMessage, topOffset = 0 }
   const desktopHeight = `calc(100vh - ${desktopTopOffset + 16}px)`
 
   return (
-    <aside className="order-first lg:self-start">
+    <aside className="order-first min-w-0 lg:self-start">
       <div
         className="space-y-4 lg:fixed lg:w-72 lg:[top:var(--sidebar-top)] lg:[height:var(--sidebar-height)]"
         style={{
@@ -23,7 +23,7 @@ export default function Sidebar({ genres, source, sourceMessage, topOffset = 0 }
           '--sidebar-height': desktopHeight,
         }}
       >
-        <div className="surface-panel flex rounded-sm border border-[#c084fc]/12 p-4 shadow-[0_14px_36px_rgba(5,5,16,0.38)] lg:h-full lg:flex-col">
+        <div className="surface-panel flex flex-col rounded-sm border border-[#c084fc]/12 p-4 shadow-[0_14px_36px_rgba(5,5,16,0.38)] lg:h-full">
           <div className="space-y-3">
             <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#c084fc]">
               Browse
@@ -37,7 +37,7 @@ export default function Sidebar({ genres, source, sourceMessage, topOffset = 0 }
 
           <nav
             aria-label="Genres"
-            className="mt-5 flex max-h-[60vh] flex-col gap-2 overflow-y-auto pr-1 overscroll-contain lg:flex-1 lg:min-h-0 lg:max-h-none"
+            className="mt-5 grid max-h-[60vh] grid-cols-1 gap-2 overflow-y-auto pr-1 overscroll-contain sm:grid-cols-2 lg:flex lg:flex-1 lg:min-h-0 lg:max-h-none lg:flex-col"
           >
             <NavLink className={({ isActive }) => getChipClass(isActive)} end to={routes.home}>
               <span>Tutti i giochi</span>

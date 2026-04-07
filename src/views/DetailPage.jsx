@@ -1,9 +1,10 @@
 import { useContext } from 'react'
-import { Link, useLoaderData, useNavigate } from 'react-router-dom'
+import { Link, useLoaderData, useNavigate, useNavigation } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import DetailGroup from '../components/DetailComponents/DetailGroup.jsx'
 import Header from '../components/DetailComponents/Header.jsx'
 import BodySection from '../components/GameDetailComponents/BodySection.jsx'
+import centraleNucleareAnimat from '../assets/centrale_nucleare_animat.svg'
 import {
   getGameDescription,
   getGenreNames,
@@ -17,7 +18,9 @@ import { UserContext } from '../context/UserContext.jsx'
 export default function DetailPage() {
   const { game, screenshots = [], source, sourceMessage } = useLoaderData()
   const navigate = useNavigate()
+  const navigation = useNavigation()
   const { profile } = useContext(UserContext)
+  const isNavigating = navigation.state !== 'idle'
   const description =
     getGameDescription(game) ||
     'Descrizione non disponibile, ma la struttura della pagina e pronta per gestire dati completi, preferiti e recensioni.'
@@ -34,6 +37,18 @@ export default function DetailPage() {
 
   return (
     <main className="min-h-screen bg-[#050510] text-base-content" data-theme="night">
+      {isNavigating ? (
+        <div className="pointer-events-none fixed inset-0 z-[90] flex items-center justify-center bg-[#050510]/30 backdrop-blur-[1px]">
+          <div className="flex items-center justify-center">
+            <img
+              alt="Loading animation"
+              className="h-50 w-50 object-contain sm:h-50 sm:w-50"
+              src={centraleNucleareAnimat}
+            />
+          </div>
+        </div>
+      ) : null}
+
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         {backdropImage ? (
           <div
@@ -85,6 +100,25 @@ export default function DetailPage() {
             <DetailGroup items={developers} title="Sviluppatori" />
             <DetailGroup items={publishers} title="Publisher" />
             <DetailGroup items={tags} title="Tag" />
+            <section className="surface-panel-soft rounded-sm border border-[#c084fc]/12 shadow-[0_12px_30px_rgba(5,5,16,0.32)]">
+              <div className="flex h-full flex-col justify-center gap-3 p-5">
+                <button
+                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-[#ec4899]/16 bg-[#120f31]/88 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#f5f3ff] transition-colors hover:border-[#ec4899]/30 hover:bg-[#211950]"
+                  onClick={() => navigate(-1)}
+                  type="button"
+                >
+                  <FiArrowLeft className="text-sm" />
+                  <span>Torna indietro</span>
+                </button>
+
+                <Link
+                  className="inline-flex items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#1e1b4b]/70 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#ddd6fe] transition-colors hover:border-[#c084fc]/30 hover:text-white"
+                  to={routes.home}
+                >
+                  Torna al catalogo
+                </Link>
+              </div>
+            </section>
           </div>
         </div>
       </div>

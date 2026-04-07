@@ -197,25 +197,25 @@ const Navbar = forwardRef(function Navbar(_, ref) {
   return (
     <div
       ref={ref}
-      className="fixed inset-x-0 top-0 z-50 px-0 sm:px-4 lg:px-6"
+      className="fixed inset-x-0 top-4 z-50 px-3 sm:top-6 sm:px-4 lg:px-6"
     >
       <header className="surface-panel mx-auto max-w-[1500px] border-b border-[#c084fc]/12 shadow-[0_18px_48px_rgba(5,5,16,0.55)] backdrop-blur">
         <div className="flex flex-col gap-3 px-4 py-4 sm:px-6">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-              <Link className="group flex items-center gap-4" to={routes.home}>
-                  <img alt="Rehacktor logo" className="h-20 w-20 object-contain" src={logo} />
-                <span className="flex flex-col">
+            <div className="min-w-0 flex flex-col gap-4 lg:flex-row lg:items-center">
+              <Link className="group flex min-w-0 items-center gap-3 sm:gap-4" to={routes.home}>
+                <img alt="Rehacktor logo" className="h-16 w-16 object-contain sm:h-20 sm:w-20" src={logo} />
+                <span className="flex min-w-0 flex-col">
                   <small className="text-[0.68rem] uppercase tracking-[0.4em] text-[#c084fc]">
                     rehacktor pulse
                   </small>
-                  <strong className="font-display text-[1.9rem] uppercase leading-none tracking-[0.08em] text-white">
+                  <strong className="font-display text-[1.55rem] uppercase leading-none tracking-[0.08em] text-white sm:text-[1.9rem]">
                     Rehacktor
                   </strong>
                 </span>
               </Link>
 
-              <nav aria-label="Primary" className="flex flex-wrap items-center gap-2">
+              <nav aria-label="Primary" className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                 <NavLink className={({ isActive }) => getNavClass(isActive)} end to={routes.home}>
                   Catalogo
                 </NavLink>
@@ -253,9 +253,9 @@ const Navbar = forwardRef(function Navbar(_, ref) {
                 Cerca un gioco
               </label>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="relative flex-1" ref={searchRef}>
-                  <div className="flex w-full items-center overflow-hidden rounded-sm border border-[#8b5cf6]/35 bg-[#110f2d]">
+                  <div className="flex w-full flex-col overflow-hidden rounded-sm border border-[#8b5cf6]/35 bg-[#110f2d] min-[480px]:flex-row min-[480px]:items-center">
                     <input
                       id="game-search"
                       autoComplete="off"
@@ -267,7 +267,7 @@ const Navbar = forwardRef(function Navbar(_, ref) {
                       type="search"
                       value={query}
                     />
-                    <button className="brand-primary inline-flex h-11 items-center px-5 text-sm font-semibold text-[#130f2c]" type="submit">
+                    <button className="brand-primary inline-flex h-11 w-full items-center justify-center px-5 text-sm font-semibold text-[#130f2c] min-[480px]:w-auto" type="submit">
                       Cerca
                     </button>
                   </div>
@@ -351,7 +351,7 @@ const Navbar = forwardRef(function Navbar(_, ref) {
 
                 {user ? (
                   <>
-                    <div className="relative flex-none" ref={avatarMenuRef}>
+                    <div className="relative flex-none self-end sm:self-auto" ref={avatarMenuRef}>
                       <button
                         aria-label="Apri menu utente"
                         className="brand-highlight flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/22 bg-[#1f173f]"

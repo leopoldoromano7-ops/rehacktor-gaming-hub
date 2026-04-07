@@ -23,10 +23,9 @@ export default function GenrePage() {
           { label: 'Piattaforme', value: topPlatforms || 'Multi-platform' },
         ]}
         contextTags={[genreLabel, source === 'rawg' ? 'Feed live' : 'Offline']}
-        description="La cover a sinistra resta il gioco in evidenza, mentre il pannello a destra riassume il filtro selezionato e il perimetro del genere aperto."
         eyebrow="Genere"
         featuredGame={featuredGame}
-        sideDescription={`Hai selezionato il genere ${genreLabel}. Qui trovi tutti i giochi di questo specifico genere restituiti da RAWG.`}
+        sideDescription={`Hai selezionato il genere ${genreLabel}. Qui trovi tutti i giochi di questo specifico genere restituiti dal catalogo.`}
         sideTitle={`${genreLabel}`}
         source={source}
         sourceMessage={

@@ -1,13 +1,35 @@
 import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FaUserAstronaut } from 'react-icons/fa'
+import { FaHeart } from 'react-icons/fa6'
 import { FiHeart, FiMail, FiShield, FiUser } from 'react-icons/fi'
-import Miranda from '../../assets/miranda.jpg'
 import supabase from '../../database/supabase.js'
 import { UserContext } from '../../context/UserContext.jsx'
 import { routes } from '../../router/routes.js'
+import { getGamePreviewPayload } from '../../services/rawg.js'
+import { formatReleaseDate, getToneFromSeed } from '../../utils/game-utils.js'
 
 const FAVOURITES_TABLE = 'favourites'
+
+function RevealableId({ label, value }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  if (!value) {
+    return <p className="mt-1 text-sm text-white">n/a</p>
+  }
+
+  return (
+    <button
+      aria-expanded={isExpanded}
+      className="mt-1 break-all text-left text-sm text-white transition-colors hover:text-[#f4b7da] focus:outline-none focus-visible:text-[#f4b7da]"
+      onClick={() => setIsExpanded((currentValue) => !currentValue)}
+      title={isExpanded ? `Nascondi ${label} completo` : `Mostra ${label} completo`}
+      type="button"
+    >
+      {isExpanded ? value : `${value.slice(0, 8)}...`}
+    </button>
+  )
+}
 
 export default function ProfilePage() {
   const { user, profile } = useContext(UserContext)
@@ -15,6 +37,7 @@ export default function ProfilePage() {
   const [userFavourites, setUserFavourites] = useState([])
   const [isLoadingFavourites, setIsLoadingFavourites] = useState(false)
   const [favouritesError, setFavouritesError] = useState('')
+  const [updatingFavouriteId, setUpdatingFavouriteId] = useState(null)
 
   useEffect(() => {
     let avatarObjectUrl
@@ -45,6 +68,9 @@ export default function ProfilePage() {
   }, [profile?.avatar_url])
 
   useEffect(() => {
+    let cancelled = false
+    const controller = new AbortController()
+
     async function getFavourites() {
       if (!profile?.id) {
         setUserFavourites([])
@@ -66,15 +92,77 @@ export default function ProfilePage() {
         return
       }
 
-      setUserFavourites(favourites ?? [])
+      const favouriteItems = favourites ?? []
+
+      if (!favouriteItems.length) {
+        setUserFavourites([])
+        setIsLoadingFavourites(false)
+        return
+      }
+
+      const favouriteCards = await Promise.all(
+        favouriteItems.map(async (favourite) => {
+          try {
+            const preview = await getGamePreviewPayload(favourite.game_id, controller.signal)
+
+            return {
+              ...favourite,
+              preview,
+            }
+          } catch {
+            return {
+              ...favourite,
+              preview: null,
+            }
+          }
+        }),
+      )
+
+      if (cancelled) {
+        return
+      }
+
+      setUserFavourites(favouriteCards)
       setIsLoadingFavourites(false)
     }
 
     getFavourites()
+
+    return () => {
+      cancelled = true
+      controller.abort()
+    }
   }, [profile?.id])
 
+  async function removeFavourite(gameId) {
+    if (!profile?.id || !gameId || updatingFavouriteId) {
+      return
+    }
+
+    setUpdatingFavouriteId(gameId)
+    setFavouritesError('')
+
+    const { error } = await supabase
+      .from(FAVOURITES_TABLE)
+      .delete()
+      .eq('profile_id', profile.id)
+      .eq('game_id', gameId)
+
+    if (error) {
+      setFavouritesError('Non riesco a rimuovere questo gioco dai preferiti.')
+      setUpdatingFavouriteId(null)
+      return
+    }
+
+    setUserFavourites((currentFavourites) =>
+      currentFavourites.filter((favourite) => favourite.game_id !== gameId),
+    )
+    setUpdatingFavouriteId(null)
+  }
+
   const displayName = profile?.username || user?.user_metadata?.username || user?.email || 'Player'
-  const shortId = user?.id ? `${user.id.slice(0, 8)}...` : 'n/a'
+  const userId = user?.id || ''
+  const hasAvatar = Boolean(avatarUrl)
 
   if (!user) {
     return (
@@ -113,11 +201,15 @@ export default function ProfilePage() {
         <div className="grid gap-px bg-[#c084fc]/10 xl:[grid-template-columns:380px_minmax(0,1fr)]">
           <aside className="surface-panel-soft flex flex-col items-center gap-5 p-6">
             <div className="brand-highlight flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/25 bg-[#1f173f]">
-              <img
-                alt="Profile"
-                className="h-full w-full object-cover"
-                src={avatarUrl || Miranda}
-              />
+              {hasAvatar ? (
+                <img
+                  alt="Profile"
+                  className="h-full w-full object-cover"
+                  src={avatarUrl}
+                />
+              ) : (
+                <FaUserAstronaut className="text-6xl text-[#f4b7da]" />
+              )}
             </div>
 
             <div className="space-y-2 text-center">
@@ -132,7 +224,7 @@ export default function ProfilePage() {
             <div className="grid w-full gap-3">
               <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-4 py-3">
                 <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">Account id</p>
-                <p className="mt-1 text-sm text-white">{shortId}</p>
+                <RevealableId label="Account id" value={userId} />
               </div>
               <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-4 py-3">
                 <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">Provider</p>
@@ -201,7 +293,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">User id</p>
-                  <p className="mt-1 text-base text-white">{shortId}</p>
+                  <RevealableId label="User id" value={userId} />
                 </div>
               </div>
             </section>
@@ -238,17 +330,65 @@ export default function ProfilePage() {
               {userFavourites.length ? (
                 <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {userFavourites.map((favourite) => (
-                    <Link
-                      className="rounded-sm border border-[#c084fc]/10 bg-[linear-gradient(180deg,#120f31_0%,#0d0a22_100%)] p-4 shadow-[0_12px_28px_rgba(5,5,16,0.24)] transition-colors hover:border-[#ec4899]/22 hover:bg-[#18133c]"
+                    <article
+                      className="relative overflow-hidden rounded-sm border border-[#c084fc]/10 bg-[linear-gradient(180deg,#120f31_0%,#0d0a22_100%)] shadow-[0_12px_28px_rgba(5,5,16,0.24)] transition-colors hover:border-[#ec4899]/22 hover:bg-[#18133c]"
                       key={`${favourite.profile_id}-${favourite.game_id}`}
-                      to={routes.detail(favourite.game_id)}
                     >
-                      <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">Favourite game</p>
-                      <h3 className="mt-3 font-display text-2xl leading-none text-white">
-                        {favourite.game_name}
-                      </h3>
-                      <p className="mt-3 text-sm text-[#c084fc]">Apri dettaglio #{favourite.game_id}</p>
-                    </Link>
+                      <button
+                        aria-label={`Rimuovi ${favourite.game_name} dai preferiti`}
+                        className="absolute right-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#ec4899]/24 bg-[#120f31]/92 text-[#ec4899] transition-colors hover:border-[#ec4899]/40 hover:bg-[#20154a] disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={updatingFavouriteId === favourite.game_id}
+                        onClick={() => removeFavourite(favourite.game_id)}
+                        type="button"
+                      >
+                        <FaHeart className="text-lg" />
+                      </button>
+
+                      <Link
+                        className="block"
+                        to={routes.detail(favourite.game_id)}
+                      >
+                        <span className="block h-36 overflow-hidden border-b border-[#c084fc]/10 bg-[#0b091e]">
+                          {favourite.preview?.background_image ? (
+                            <img
+                              alt={favourite.game_name}
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                              src={favourite.preview.background_image}
+                            />
+                          ) : (
+                            <span
+                              className="flex h-full w-full items-end p-3 text-xs font-semibold uppercase tracking-[0.16em] text-white"
+                              style={{ background: getToneFromSeed(String(favourite.game_id)) }}
+                            >
+                              {favourite.game_name.slice(0, 18)}
+                            </span>
+                          )}
+                        </span>
+
+                        <div className="space-y-3 p-4">
+                          <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">Favourite game</p>
+                          <h3 className="font-display text-2xl leading-none text-white">
+                            {favourite.game_name}
+                          </h3>
+
+                          {favourite.preview ? (
+                            <div className="flex flex-wrap gap-2">
+                              <span className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-2 py-1 text-[11px] uppercase tracking-[0.16em] text-[#f5f3ff]">
+                                {formatReleaseDate(favourite.preview.released)}
+                              </span>
+                              <span className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-2 py-1 text-[11px] uppercase tracking-[0.16em] text-[#f5f3ff]">
+                                Rating {typeof favourite.preview.rating === 'number' ? favourite.preview.rating.toFixed(1) : 'n/a'}
+                              </span>
+                            </div>
+                          ) : null}
+
+                          {updatingFavouriteId === favourite.game_id ? (
+                            <p className="text-sm text-[#c084fc]">Rimozione...</p>
+                          ) : null}
+                        </div>
+                      </Link>
+                    </article>
                   ))}
                 </div>
               ) : null}
