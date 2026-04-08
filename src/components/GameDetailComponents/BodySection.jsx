@@ -161,13 +161,13 @@ export default function BodySection({ game, profile_id }) {
 
   return (
     <section className="grid gap-4 xl:[grid-template-columns:minmax(0,1.35fr)_320px]">
-      <div className="surface-panel-soft rounded-sm border border-[#c084fc]/12 shadow-[0_16px_40px_rgba(5,5,16,0.34)]">
+      <div className="surface-panel-soft min-w-0 rounded-sm border border-[#c084fc]/12 shadow-[0_16px_40px_rgba(5,5,16,0.34)]">
         <div className="flex items-center gap-2 border-b border-[#c084fc]/10 bg-[#231d58] px-4 py-3 text-[11px] font-medium uppercase tracking-[0.28em] text-[#d4b8ff] sm:px-5">
           <FiMessageSquare className="text-sm" />
           <span>Area recensioni</span>
         </div>
 
-        <div className="p-5">
+        <div className="p-4 sm:p-5">
           <div className="space-y-4">
             <div>
               <p className="text-sm uppercase tracking-[0.22em] text-[#c084fc]">Lascia una recensione</p>
@@ -177,7 +177,7 @@ export default function BodySection({ game, profile_id }) {
             </div>
 
             <textarea
-              className="min-h-[180px] w-full rounded-sm border border-[#c084fc]/12 bg-[#0d0a22] px-4 py-3 text-sm text-white outline-none placeholder:text-[#9f93d0]"
+              className="min-h-[160px] w-full rounded-sm border border-[#c084fc]/12 bg-[#0d0a22] px-4 py-3 text-sm leading-6 text-white outline-none placeholder:text-[#9f93d0] sm:min-h-[180px]"
               onChange={handleDescription}
               placeholder={`Scrivi qui cosa ne pensi di ${game.name}...`}
               value={description}
@@ -185,7 +185,7 @@ export default function BodySection({ game, profile_id }) {
 
             <div className="flex flex-wrap items-center gap-3">
               <button
-                className="brand-secondary inline-flex rounded-sm px-4 py-2.5 text-sm font-semibold text-white"
+                className="brand-secondary inline-flex w-full items-center justify-center rounded-sm px-4 py-2.5 text-sm font-semibold text-white sm:w-auto"
                 disabled={!description.trim() || isSubmittingReview}
                 onClick={addReview}
                 type="button"
@@ -199,9 +199,9 @@ export default function BodySection({ game, profile_id }) {
             ) : null}
 
             <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] p-4">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <p className="text-sm uppercase tracking-[0.22em] text-[#c084fc]">Recensioni del gioco</p>
-                <span className="text-xs uppercase tracking-[0.18em] text-[#b4a9df]">
+                <span className="text-xs uppercase tracking-[0.18em] text-[#b4a9df] sm:text-right">
                   {gameReviews.length} totali
                 </span>
               </div>
@@ -226,7 +226,7 @@ export default function BodySection({ game, profile_id }) {
                       <p className="text-[10px] uppercase tracking-[0.22em] text-[#b4a9df]">
                         Review {index + 1}
                       </p>
-                      <p className="mt-2 text-sm leading-6 text-[#f5f3ff]">{review.description}</p>
+                      <p className="mt-2 break-words text-sm leading-6 text-[#f5f3ff]">{review.description}</p>
                     </article>
                   ))}
                 </div>
@@ -236,19 +236,19 @@ export default function BodySection({ game, profile_id }) {
         </div>
       </div>
 
-      <aside className="surface-panel-soft rounded-sm border border-[#c084fc]/12 shadow-[0_16px_40px_rgba(5,5,16,0.34)]">
+      <aside className="surface-panel-soft min-w-0 rounded-sm border border-[#c084fc]/12 shadow-[0_16px_40px_rgba(5,5,16,0.34)]">
         <div className="border-b border-[#c084fc]/10 bg-[#231d58] px-4 py-3 text-[11px] font-medium uppercase tracking-[0.28em] text-[#d4b8ff] sm:px-5">
           Preferiti
         </div>
 
-        <div className="flex h-full flex-col gap-4 p-5">
+        <div className="flex h-full flex-col gap-4 p-4 sm:p-5">
           <p className="text-sm leading-6 text-[#ddd6fe]">
             Aggiungi o rimuovi questo gioco dai tuoi preferiti.
           </p>
 
           <button
             className={[
-              'inline-flex min-h-[148px] flex-col items-center justify-center gap-3 rounded-sm border px-4 py-6 transition-colors',
+              'inline-flex min-h-[132px] w-full flex-col items-center justify-center gap-3 rounded-sm border px-4 py-5 text-center transition-colors sm:min-h-[148px] sm:py-6',
               isFavourite
                 ? 'border-[#ec4899]/35 bg-[#ec4899]/10 text-white'
                 : 'border-[#c084fc]/14 bg-[#0d0a22] text-[#ddd6fe] hover:border-[#c084fc]/28 hover:bg-[#120f31]',
@@ -263,7 +263,7 @@ export default function BodySection({ game, profile_id }) {
               <FaRegHeart className="text-4xl text-[#c084fc]" />
             )}
 
-            <span className="text-sm font-semibold uppercase tracking-[0.18em]">
+            <span className="text-sm font-semibold uppercase tracking-[0.14em] leading-5 sm:tracking-[0.18em]">
               {isLoadingFavourite
                 ? 'Controllo...'
                 : isUpdatingFavourite
@@ -275,7 +275,7 @@ export default function BodySection({ game, profile_id }) {
           </button>
 
           <Link
-            className="inline-flex items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#0d0a22] px-4 py-3 text-sm font-medium text-[#ddd6fe] transition-colors hover:border-[#c084fc]/28 hover:bg-[#120f31] hover:text-white"
+            className="inline-flex w-full items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#0d0a22] px-4 py-3 text-center text-sm font-medium text-[#ddd6fe] transition-colors hover:border-[#c084fc]/28 hover:bg-[#120f31] hover:text-white"
             to={routes.profile}
           >
             I tuoi preferiti

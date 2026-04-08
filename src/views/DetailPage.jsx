@@ -63,11 +63,11 @@ export default function DetailPage() {
         <div className="absolute bottom-10 left-1/3 h-64 w-64 rounded-full bg-[#1e1b4b]/70 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1500px] px-0 pb-10 pt-5 sm:px-4 lg:px-6">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
+      <div className="relative mx-auto w-full max-w-[1500px] px-3 pb-8 pt-4 sm:px-4 sm:pb-10 sm:pt-5 lg:px-6">
+        <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <button
-              className="inline-flex items-center gap-2 rounded-sm border border-[#ec4899]/16 bg-[#120f31]/88 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#f5f3ff] transition-colors hover:border-[#ec4899]/30 hover:bg-[#211950]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[#ec4899]/16 bg-[#120f31]/88 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#f5f3ff] transition-colors hover:border-[#ec4899]/30 hover:bg-[#211950] sm:w-auto sm:text-xs sm:tracking-[0.18em]"
               onClick={() => navigate(-1)}
               type="button"
             >
@@ -76,7 +76,7 @@ export default function DetailPage() {
             </button>
 
             <Link
-              className="inline-flex items-center rounded-sm border border-[#c084fc]/14 bg-[#1e1b4b]/70 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#ddd6fe] transition-colors hover:border-[#c084fc]/30 hover:text-white"
+              className="inline-flex w-full items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#1e1b4b]/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#ddd6fe] transition-colors hover:border-[#c084fc]/30 hover:text-white sm:w-auto sm:text-xs sm:tracking-[0.18em]"
               to={routes.home}
             >
               Torna al catalogo
@@ -84,26 +84,28 @@ export default function DetailPage() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <Header game={game} images={screenshots} source={source} sourceMessage={sourceMessage} />
 
-          <section className="surface-panel-soft rounded-sm border border-[#c084fc]/12 p-6 shadow-[0_16px_40px_rgba(5,5,16,0.34)]">
+          <section className="surface-panel-soft rounded-sm border border-[#c084fc]/12 p-4 shadow-[0_16px_40px_rgba(5,5,16,0.34)] sm:p-6">
             <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#c084fc]">About this game</p>
-            <p className="mt-4 max-w-5xl text-base leading-8 text-[#f5f3ff]">{description}</p>
+            <p className="mt-3 max-w-5xl text-sm leading-7 text-[#f5f3ff] sm:mt-4 sm:text-base sm:leading-8">
+              {description}
+            </p>
           </section>
 
           {profile ? <BodySection game={game} profile_id={profile.id} /> : null}
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
             <DetailGroup items={genres} title="Generi" />
             <DetailGroup items={platforms} title="Piattaforme" />
             <DetailGroup items={developers} title="Sviluppatori" />
             <DetailGroup items={publishers} title="Publisher" />
             <DetailGroup items={tags} title="Tag" />
             <section className="surface-panel-soft rounded-sm border border-[#c084fc]/12 shadow-[0_12px_30px_rgba(5,5,16,0.32)]">
-              <div className="flex h-full flex-col justify-center gap-3 p-5">
+              <div className="flex h-full flex-col justify-center gap-3 p-4 sm:p-5">
                 <button
-                  className="inline-flex items-center justify-center gap-2 rounded-sm border border-[#ec4899]/16 bg-[#120f31]/88 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#f5f3ff] transition-colors hover:border-[#ec4899]/30 hover:bg-[#211950]"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-sm border border-[#ec4899]/16 bg-[#120f31]/88 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#f5f3ff] transition-colors hover:border-[#ec4899]/30 hover:bg-[#211950] sm:text-xs sm:tracking-[0.18em]"
                   onClick={() => navigate(-1)}
                   type="button"
                 >
@@ -112,7 +114,7 @@ export default function DetailPage() {
                 </button>
 
                 <Link
-                  className="inline-flex items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#1e1b4b]/70 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#ddd6fe] transition-colors hover:border-[#c084fc]/30 hover:text-white"
+                  className="inline-flex w-full items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#1e1b4b]/70 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#ddd6fe] transition-colors hover:border-[#c084fc]/30 hover:text-white sm:text-xs sm:tracking-[0.18em]"
                   to={routes.home}
                 >
                   Torna al catalogo

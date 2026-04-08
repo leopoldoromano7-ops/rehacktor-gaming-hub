@@ -17,11 +17,13 @@ const Navbar = forwardRef(function Navbar(_, ref) {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [hideMobilePrimaryNav, setHideMobilePrimaryNav] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
   const [suggestionsError, setSuggestionsError] = useState('')
   const searchRef = useRef(null)
-  const avatarMenuRef = useRef(null)
+  const mobileAvatarMenuRef = useRef(null)
+  const desktopAvatarMenuRef = useRef(null)
   const debounceRef = useRef(null)
   const abortRef = useRef(null)
   const { user, profile, signOut } = useContext(UserContext)
@@ -51,6 +53,33 @@ const Navbar = forwardRef(function Navbar(_, ref) {
       isActive
         ? 'border-[#ec4899]/20 bg-[#ec4899]/12 text-white'
         : 'border-[#ec4899]/12 bg-transparent text-[#e7ddff] hover:border-[#ec4899]/24 hover:bg-[#211950] hover:text-white',
+    ].join(' ')
+  }
+
+  function getMobilePrimaryNavClass(isActive) {
+    return [
+      'inline-flex h-9 flex-1 items-center justify-center rounded-sm border px-2 text-[0.66rem] font-medium uppercase tracking-[0.08em] whitespace-nowrap transition-colors',
+      isActive
+        ? 'border-[#c084fc]/45 bg-[#8b5cf6]/18 text-white brand-highlight'
+        : 'border-transparent bg-transparent text-[#e7ddff] hover:border-[#c084fc]/20 hover:bg-[#c084fc]/10 hover:text-white',
+    ].join(' ')
+  }
+
+  function getMobileSpotlightLinkClass(isActive) {
+    return [
+      'inline-flex h-9 flex-1 items-center justify-center rounded-sm border px-2 text-[0.66rem] font-medium whitespace-nowrap transition-colors',
+      isActive
+        ? 'border-[#ec4899]/20 bg-[#ec4899]/12 text-white'
+        : 'border-[#ec4899]/12 bg-transparent text-[#e7ddff] hover:border-[#ec4899]/24 hover:bg-[#211950] hover:text-white',
+    ].join(' ')
+  }
+
+  function getMobileIconButtonClass(isActive) {
+    return [
+      'inline-flex h-10 w-10 items-center justify-center rounded-sm border transition-colors',
+      isActive
+        ? 'border-[#c084fc]/45 bg-[#8b5cf6]/18 text-white brand-highlight'
+        : 'border-[#c084fc]/12 bg-[#120f31]/88 text-[#f5f3ff] hover:border-[#c084fc]/28 hover:bg-[#211950]',
     ].join(' ')
   }
 
@@ -150,7 +179,10 @@ const Navbar = forwardRef(function Navbar(_, ref) {
         closeSuggestions()
       }
 
-       if (!avatarMenuRef.current?.contains(event.target)) {
+      const clickedInsideMobileMenu = mobileAvatarMenuRef.current?.contains(event.target)
+      const clickedInsideDesktopMenu = desktopAvatarMenuRef.current?.contains(event.target)
+
+      if (!clickedInsideMobileMenu && !clickedInsideDesktopMenu) {
         setIsAvatarMenuOpen(false)
       }
     }
@@ -160,6 +192,26 @@ const Navbar = forwardRef(function Navbar(_, ref) {
     return () => {
       document.removeEventListener('pointerdown', handlePointerDown)
       clearPendingSearch()
+    }
+  }, [])
+
+  useEffect(() => {
+    function updateMobilePrimaryNav() {
+      if (window.innerWidth >= 640) {
+        setHideMobilePrimaryNav(false)
+        return
+      }
+
+      setHideMobilePrimaryNav(window.scrollY > 24)
+    }
+
+    updateMobilePrimaryNav()
+    window.addEventListener('scroll', updateMobilePrimaryNav, { passive: true })
+    window.addEventListener('resize', updateMobilePrimaryNav)
+
+    return () => {
+      window.removeEventListener('scroll', updateMobilePrimaryNav)
+      window.removeEventListener('resize', updateMobilePrimaryNav)
     }
   }, [])
 
@@ -200,22 +252,126 @@ const Navbar = forwardRef(function Navbar(_, ref) {
       className="fixed inset-x-0 top-4 z-50 px-3 sm:top-6 sm:px-4 lg:px-6"
     >
       <header className="surface-panel mx-auto max-w-[1500px] border-b border-[#c084fc]/12 shadow-[0_18px_48px_rgba(5,5,16,0.55)] backdrop-blur">
-        <div className="flex flex-col gap-3 px-4 py-4 sm:px-6">
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="min-w-0 flex flex-col gap-4 lg:flex-row lg:items-center">
-              <Link className="group flex min-w-0 items-center gap-3 sm:gap-4" to={routes.home}>
-                <img alt="Rehacktor logo" className="h-16 w-16 object-contain sm:h-20 sm:w-20" src={logo} />
+        <div className="flex flex-col gap-2 px-4 py-3 sm:gap-3 sm:px-6 sm:py-4">
+          <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between sm:gap-4">
+            <div className="min-w-0 flex flex-col gap-2 lg:flex-row lg:items-center sm:gap-4">
+              <div className="flex items-center justify-between gap-3 sm:hidden">
+                <Link className="group flex min-w-0 items-center gap-3 sm:gap-4" to={routes.home}>
+                  <img alt="Rehacktor logo" className="h-16 w-16 object-contain sm:h-20 sm:w-20" src={logo} />
+                  <span className="flex min-w-0 flex-col">
+                    <small className="text-[0.68rem] uppercase tracking-[0.4em] text-[#c084fc]">
+                      rehacktor pulse
+                    </small>
+                    <strong className="font-display text-[1.55rem] uppercase leading-none tracking-[0.08em] text-white sm:text-[1.9rem]">
+                      Rehacktor
+                    </strong>
+                  </span>
+                </Link>
+
+                <div className="flex items-center gap-2 sm:hidden">
+                  {!user ? (
+                    <>
+                      <NavLink className={({ isActive }) => getMobileIconButtonClass(isActive)} end to={routes.register}>
+                        <FiUserPlus className="text-base" />
+                      </NavLink>
+                      <NavLink className={({ isActive }) => getMobileIconButtonClass(isActive)} end to={routes.login}>
+                        <HiOutlineArrowRightOnRectangle className="text-base" />
+                      </NavLink>
+                    </>
+                  ) : (
+                    <div className="relative" ref={mobileAvatarMenuRef}>
+                      <button
+                        aria-label="Apri menu utente"
+                        className="brand-highlight flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/22 bg-[#1f173f]"
+                        onClick={toggleAvatarMenu}
+                        type="button"
+                      >
+                        {avatarUrl ? (
+                          <img
+                            alt={getUserLabel()}
+                            className="h-full w-full object-cover"
+                            src={avatarUrl}
+                          />
+                        ) : (
+                          <FaUserAstronaut className="text-xl text-[#f4b7da]" />
+                        )}
+                      </button>
+
+                      {isAvatarMenuOpen ? (
+                        <div className="absolute right-0 top-full z-40 mt-2 min-w-[13rem] overflow-hidden rounded-sm border border-[#8b5cf6]/25 bg-[#140f32] shadow-[0_22px_56px_rgba(5,5,16,0.62)]">
+                          <div className="border-b border-[#c084fc]/10 px-4 py-3">
+                            <p className="text-[10px] uppercase tracking-[0.24em] text-[#b4a9df]">
+                              Utente
+                            </p>
+                            <p className="mt-1 truncate text-sm font-medium text-white">
+                              {getUserLabel()}
+                            </p>
+                          </div>
+
+                          <Link
+                            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-[#f5f3ff] transition-colors hover:bg-[#211950]"
+                            onClick={() => setIsAvatarMenuOpen(false)}
+                            to={routes.profile}
+                          >
+                            <FiUser className="text-base text-[#c084fc]" />
+                            <span>Profilo</span>
+                          </Link>
+
+                          <button
+                            className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-[#f5f3ff] transition-colors hover:bg-[#211950]"
+                            onClick={handleLogout}
+                            type="button"
+                          >
+                            <FiLogOut className="text-base text-[#f4b7da]" />
+                            <span>Logout</span>
+                          </button>
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Link className="group hidden min-w-0 items-center gap-4 sm:flex" to={routes.home}>
+                <img alt="Rehacktor logo" className="h-20 w-20 object-contain" src={logo} />
                 <span className="flex min-w-0 flex-col">
                   <small className="text-[0.68rem] uppercase tracking-[0.4em] text-[#c084fc]">
                     rehacktor pulse
                   </small>
-                  <strong className="font-display text-[1.55rem] uppercase leading-none tracking-[0.08em] text-white sm:text-[1.9rem]">
+                  <strong className="font-display text-[1.9rem] uppercase leading-none tracking-[0.08em] text-white">
                     Rehacktor
                   </strong>
                 </span>
               </Link>
 
-              <nav aria-label="Primary" className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <div
+                className={[
+                  'overflow-hidden transition-[max-height,opacity,transform] duration-200 ease-out sm:hidden',
+                  hideMobilePrimaryNav
+                    ? 'max-h-0 -translate-y-2 opacity-0 pointer-events-none'
+                    : 'max-h-12 translate-y-0 opacity-100',
+                ].join(' ')}
+              >
+                <nav aria-label="Primary mobile" className="flex items-center gap-2">
+                  <NavLink className={({ isActive }) => getMobilePrimaryNavClass(isActive)} end to={routes.home}>
+                    Catalogo
+                  </NavLink>
+                  <Link
+                    className={getMobileSpotlightLinkClass(currentSort === 'trending')}
+                    to="/?sort=trending"
+                  >
+                    Trending now
+                  </Link>
+                  <Link
+                    className={getMobileSpotlightLinkClass(currentSort === 'top-rated')}
+                    to="/?sort=top-rated"
+                  >
+                    Top rated
+                  </Link>
+                </nav>
+              </div>
+
+              <nav aria-label="Primary" className="hidden flex-wrap items-center gap-2 sm:flex sm:gap-2.5">
                 <NavLink className={({ isActive }) => getNavClass(isActive)} end to={routes.home}>
                   Catalogo
                 </NavLink>
@@ -255,11 +411,14 @@ const Navbar = forwardRef(function Navbar(_, ref) {
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="relative flex-1" ref={searchRef}>
-                  <div className="flex w-full flex-col overflow-hidden rounded-sm border border-[#8b5cf6]/35 bg-[#110f2d] min-[480px]:flex-row min-[480px]:items-center">
+                  <div className="flex w-full items-center overflow-hidden rounded-sm border border-[#8b5cf6]/35 bg-[#110f2d]">
+                    <button className="brand-primary order-1 inline-flex h-11 shrink-0 items-center justify-center px-4 text-sm font-semibold text-[#130f2c] sm:order-2 sm:px-5" type="submit">
+                      Cerca
+                    </button>
                     <input
                       id="game-search"
                       autoComplete="off"
-                      className="h-11 w-full bg-transparent px-4 text-sm text-white outline-none placeholder:text-[#a59bd4]"
+                      className="order-2 h-11 min-w-0 flex-1 bg-transparent px-4 text-sm text-white outline-none placeholder:text-[#a59bd4] sm:order-1"
                       name="query"
                       onChange={handleQueryChange}
                       onFocus={() => setIsSearchOpen(true)}
@@ -267,9 +426,6 @@ const Navbar = forwardRef(function Navbar(_, ref) {
                       type="search"
                       value={query}
                     />
-                    <button className="brand-primary inline-flex h-11 w-full items-center justify-center px-5 text-sm font-semibold text-[#130f2c] min-[480px]:w-auto" type="submit">
-                      Cerca
-                    </button>
                   </div>
 
                   {showSuggestionsPanel ? (
@@ -351,7 +507,7 @@ const Navbar = forwardRef(function Navbar(_, ref) {
 
                 {user ? (
                   <>
-                    <div className="relative flex-none self-end sm:self-auto" ref={avatarMenuRef}>
+                    <div className="relative hidden flex-none self-end sm:block sm:self-auto" ref={desktopAvatarMenuRef}>
                       <button
                         aria-label="Apri menu utente"
                         className="brand-highlight flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-[#ec4899]/22 bg-[#1f173f]"
