@@ -18,26 +18,26 @@
         filter: url(#softWhite);
         transform-box: fill-box;
         transform-origin: center;
-        animation: rPulse 4.2s ease-in-out infinite;
+        animation: rPulse 1.8s ease-in-out infinite;
       }
       .reactor {
         filter: url(#neonPurple);
         transform-box: fill-box;
         transform-origin: center;
-        animation: reactorFloat 4.8s ease-in-out infinite;
+        animation: reactorFloat 3.2s ease-in-out infinite;
       }
       .pink {
         filter: url(#neonPink);
         transform-box: fill-box;
         transform-origin: center;
-        animation: pinkPulse 1.8s ease-in-out infinite;
+        animation: pinkPulse 1.2s ease-in-out infinite;
       }
       .purple {
         filter: url(#neonPurple);
-        animation: violetBreath 3.2s ease-in-out infinite;
+        animation: violetBreath 0.1s ease-in-out infinite;
       }
       .detail {
-        animation: shimmer 3.6s ease-in-out infinite;
+        animation: shimmer 2.4s ease-in-out infinite;
       }
       @keyframes rPulse {
         0%, 100% { transform: translateY(0px) scale(1); }
@@ -49,7 +49,7 @@
       }
       @keyframes pinkPulse {
         0%, 100% { transform: scale(1); opacity: 0.96; }
-        50% { transform: scale(1.08); opacity: 1; }
+        50% { transform: scale(0.50); opacity: 1; }
       }
       @keyframes violetBreath {
         0%, 100% { opacity: 0.92; }
