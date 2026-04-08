@@ -274,13 +274,6 @@ export default function BodySection({ game, profile_id }) {
             </span>
           </button>
 
-          <div className="rounded-sm border border-[#c084fc]/10 bg-[#0d0a22] px-4 py-3 text-sm text-[#f5f3ff]">
-            {' '}
-            <span className={isFavourite ? 'text-[#f4b7da]' : 'text-[#c084fc]'}>
-              {isFavourite ? 'gioco presente nei preferiti' : 'gioco non presente nei preferiti'}
-            </span>
-          </div>
-
           <Link
             className="inline-flex items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#0d0a22] px-4 py-3 text-sm font-medium text-[#ddd6fe] transition-colors hover:border-[#c084fc]/28 hover:bg-[#120f31] hover:text-white"
             to={routes.profile}
