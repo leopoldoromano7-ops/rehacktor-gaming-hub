@@ -276,7 +276,7 @@ const Navbar = forwardRef(function Navbar(_, ref) {
                     <div className="absolute left-0 right-0 top-full z-40 mt-2 overflow-hidden rounded-sm border border-[#8b5cf6]/25 bg-[#140f32] shadow-[0_22px_56px_rgba(5,5,16,0.62)]">
                       {isLoadingSuggestions ? (
                         <div className="flex items-center gap-3 px-4 py-4 text-sm text-[#f5f3ff]">
-                          <span className="loading loading-spinner loading-sm text-[#c084fc]" />
+                          <span className="loading loading-ring loading-sm text-[#c084fc]"></span>
                           <span>Sto cercando i giochi...</span>
                         </div>
                       ) : null}

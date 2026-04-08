@@ -67,7 +67,7 @@ export default function GameCard({
               type="button"
             >
               {isFavouriteLoading || isUpdatingFavourite ? (
-                <span className="loading loading-spinner loading-xs text-current" />
+                <span className="loading loading-ring loading-xs text-[#c084fc]"></span>
               ) : isFavourite ? (
                 <FaHeart className="text-lg" />
               ) : (
