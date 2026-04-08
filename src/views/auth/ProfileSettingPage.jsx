@@ -218,7 +218,9 @@ return (
                                 )}
                             </div>
                             <div className="text-sm leading-6 text-[#b4a9df]">
-                                <p>Anteprima</p>
+                                <p>Anteprima
+                                    
+                                </p>
                             </div>
                         </div>
 
