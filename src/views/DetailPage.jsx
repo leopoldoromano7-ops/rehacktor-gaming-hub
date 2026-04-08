@@ -94,7 +94,7 @@ export default function DetailPage() {
             </p>
           </section>
 
-          {profile ? <BodySection game={game} profile_id={profile.id} /> : null}
+          <BodySection game={game} profile_id={profile?.id} />
 
           <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
             <DetailGroup items={genres} title="Generi" />

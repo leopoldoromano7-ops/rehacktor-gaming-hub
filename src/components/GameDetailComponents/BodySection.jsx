@@ -9,6 +9,7 @@ const FAVOURITES_TABLE = 'favourites'
 const REVIEWS_TABLE = 'reviews'
 
 export default function BodySection({ game, profile_id }) {
+  const isAuthenticated = Boolean(profile_id)
   const [isFavourite, setIsFavourite] = useState(false)
   const [isLoadingFavourite, setIsLoadingFavourite] = useState(true)
   const [isUpdatingFavourite, setIsUpdatingFavourite] = useState(false)
@@ -174,19 +175,33 @@ export default function BodySection({ game, profile_id }) {
               <p className="mt-2 text-sm leading-6 text-[#ddd6fe]">
                 Scrivi la tua recensione del gioco e leggi quelle che sono gia state lasciate dagli altri utenti.
               </p>
+              {!isAuthenticated ? (
+                <p className="mt-3 text-sm leading-6 text-[#f4b7da]">
+                  Puoi leggere le recensioni anche senza login. Per pubblicarne una, fai{' '}
+                  <Link className="text-[#c084fc] underline-offset-2 hover:text-white hover:underline" to={routes.login}>
+                    accesso
+                  </Link>
+                  {' '}o crea un account.
+                </p>
+              ) : null}
             </div>
 
             <textarea
               className="min-h-[160px] w-full rounded-sm border border-[#c084fc]/12 bg-[#0d0a22] px-4 py-3 text-sm leading-6 text-white outline-none placeholder:text-[#9f93d0] sm:min-h-[180px]"
+              disabled={!isAuthenticated}
               onChange={handleDescription}
-              placeholder={`Scrivi qui cosa ne pensi di ${game.name}...`}
+              placeholder={
+                isAuthenticated
+                  ? `Scrivi qui cosa ne pensi di ${game.name}...`
+                  : 'Accedi per scrivere una recensione.'
+              }
               value={description}
             />
 
             <div className="flex flex-wrap items-center gap-3">
               <button
                 className="brand-secondary inline-flex w-full items-center justify-center rounded-sm px-4 py-2.5 text-sm font-semibold text-white sm:w-auto"
-                disabled={!description.trim() || isSubmittingReview}
+                disabled={!isAuthenticated || !description.trim() || isSubmittingReview}
                 onClick={addReview}
                 type="button"
               >
@@ -246,6 +261,12 @@ export default function BodySection({ game, profile_id }) {
             Aggiungi o rimuovi questo gioco dai tuoi preferiti.
           </p>
 
+          {!isAuthenticated ? (
+            <p className="text-sm leading-6 text-[#f4b7da]">
+              I preferiti sono disponibili solo dopo il login.
+            </p>
+          ) : null}
+
           <button
             className={[
               'inline-flex min-h-[132px] w-full flex-col items-center justify-center gap-3 rounded-sm border px-4 py-5 text-center transition-colors sm:min-h-[148px] sm:py-6',
@@ -253,7 +274,7 @@ export default function BodySection({ game, profile_id }) {
                 ? 'border-[#ec4899]/35 bg-[#ec4899]/10 text-white'
                 : 'border-[#c084fc]/14 bg-[#0d0a22] text-[#ddd6fe] hover:border-[#c084fc]/28 hover:bg-[#120f31]',
             ].join(' ')}
-            disabled={isLoadingFavourite || isUpdatingFavourite}
+            disabled={!isAuthenticated || isLoadingFavourite || isUpdatingFavourite}
             onClick={isFavourite ? removeGame : addGame}
             type="button"
           >
@@ -276,9 +297,9 @@ export default function BodySection({ game, profile_id }) {
 
           <Link
             className="inline-flex w-full items-center justify-center rounded-sm border border-[#c084fc]/14 bg-[#0d0a22] px-4 py-3 text-center text-sm font-medium text-[#ddd6fe] transition-colors hover:border-[#c084fc]/28 hover:bg-[#120f31] hover:text-white"
-            to={routes.profile}
+            to={isAuthenticated ? routes.profile : routes.login}
           >
-            I tuoi preferiti
+            {isAuthenticated ? 'I tuoi preferiti' : 'Accedi per salvare'}
           </Link>
 
           {favouriteError ? (
