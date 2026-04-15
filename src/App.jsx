@@ -1,6 +1,7 @@
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router.jsx'
 import { UserContextProvider } from './context/UserContext.jsx'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
       <UserContextProvider>
         <RouterProvider router={router} />
       </UserContextProvider>
+      <SpeedInsights />
     </>
   )
 }
