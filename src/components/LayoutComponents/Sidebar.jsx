@@ -125,7 +125,7 @@ export default function Sidebar({ genres, source, sourceMessage, topOffset = 0 }
       </div>
 
       <div
-        className="hidden space-y-4 sm:block lg:fixed lg:w-72 lg:[top:var(--sidebar-top)] lg:[height:var(--sidebar-height)]"
+        className="hidden space-y-4 sm:block lg:fixed lg:w-72 lg:-translate-x-[30px] lg:[top:var(--sidebar-top)] lg:[height:var(--sidebar-height)]"
         style={{
           '--sidebar-top': `${desktopTopOffset}px`,
           '--sidebar-height': desktopHeight,

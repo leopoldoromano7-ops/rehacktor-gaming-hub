@@ -19,7 +19,8 @@ export default function Layout() {
     isAuthFormPage ||
     pathname === routes.profile ||
     pathname === routes.profile_settings
-  const navbarGap = 30
+  const isHomePage = pathname === routes.home
+  const navbarGap = 60
   const layoutTopOffset = navbarHeight + navbarGap
 
   useEffect(() => {
@@ -75,9 +76,9 @@ export default function Layout() {
       >
         <Navbar ref={navbarRef} />
 
-        <main className={isAuthPage ? 'flex-1' : 'grid gap-4 lg:items-start lg:[grid-template-columns:280px_minmax(0,1fr)]'}>
+        <main className={isAuthPage ? 'flex-1' : 'grid gap-6 lg:items-start lg:[grid-template-columns:280px_minmax(0,1fr)]'}>
           {!isAuthPage ? <Sidebar genres={genres} source={source} sourceMessage={sourceMessage} topOffset={layoutTopOffset} /> : null}
-          <section className={isAuthPage ? 'min-w-0 flex-1' : 'min-w-0'}>
+          <section className={isAuthPage ? 'min-w-0 flex-1' : `min-w-0 ${isHomePage ? 'lg:translate-x-[30px]' : ''}`}>
             <Outlet />
           </section>
         </main>
@@ -85,7 +86,7 @@ export default function Layout() {
         {isAuthPage ? (
           <Footer />
         ) : (
-          <div className="grid mt-3 gap-4 lg:[grid-template-columns:280px_minmax(0,1fr)]">
+          <div className="grid mt-3 gap-6 lg:[grid-template-columns:280px_minmax(0,1fr)]">
             <div className="hidden lg:block" />
             <Footer className="lg:mt-0" />
           </div>
